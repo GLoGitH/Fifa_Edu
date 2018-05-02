@@ -15,10 +15,14 @@ namespace Fifa_WebAPI.DbContext
 		public static void Initialize(FifaDbContext context)
 		{
 			//just test to check the db is avail. 
-			SqlConnection conn = new SqlConnection("Server=.\\SQLSRV;Database=Fifa_edu;Trusted_Connection=True;MultipleActiveResultSets=true");
+			SqlConnection conn = new SqlConnection(context.Database.GetDbConnection().ConnectionString);
+			//SqlConnection conn = new SqlConnection("Server=.\\SQLSRV;Database=Fifa_edu;Trusted_Connection=True;MultipleActiveResultSets=true");
 			conn.Open(); // throws if invalid
 			conn.Close();
 			conn = null;
+
+//			if (!context.Database.Exists())
+//			  throw new Exeption("Db does not exist or Database connect failed ! ")
 
 			context.Database.EnsureCreated();
 
