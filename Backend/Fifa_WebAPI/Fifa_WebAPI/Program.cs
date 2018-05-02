@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Fifa_WebAPI.DbContext;
+using Fifa_WebAPI.Models;
 
 
 namespace Fifa_WebAPI
