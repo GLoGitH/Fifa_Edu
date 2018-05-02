@@ -7,6 +7,9 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using Fifa_WebAPI.DbContext;
+
 
 namespace Fifa_WebAPI
 {
@@ -14,12 +17,31 @@ namespace Fifa_WebAPI
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            var webhost = BuildWebHost(args);
+
+			using (var scope = webhost.Services.CreateScope())
+			{
+				var services = scope.ServiceProvider;
+				try
+				{
+				  var context = services.GetRequiredService<FifaDbContext>();
+				  DbInitializer.Initialize(context);
+				}
+				catch (Exception exc)
+				{
+					var logger = services.GetRequiredService<ILogger<Program>>();
+					logger.LogError(exc, "An error occured while seeding the DB...");
+				}
+			}
+
+			webhost.Run();
         }
+
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .Build();
+
     }
 }
