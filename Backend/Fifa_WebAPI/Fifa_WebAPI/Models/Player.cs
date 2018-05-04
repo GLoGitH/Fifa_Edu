@@ -7,10 +7,13 @@ namespace Fifa_WebAPI.Models
 {
     public class Player
     {
-		public int     ID         { get; set; }
-		public string  LastName   { get; set; }
-		public string  FirstName  { get; set; } 
-		public string  FullName   { get; } 
-    }
+		public int                       PlayerID      { get; set; }
+		public string                    LastName      { get; set; }
+		public string                    FirstName     { get; set; } 
+		public string                    FullName      { get; }        //derived, hence only getter 
+
+
+		public ICollection<Player_Team>  Player_Teams  { get; set; }
+	}
 }
 

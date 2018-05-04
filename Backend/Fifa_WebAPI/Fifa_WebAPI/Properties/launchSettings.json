@@ -1,26 +1,33 @@
 {
-  "iisSettings": {
+  "iisSettings": 
+  {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
-    "iisExpress": {
+    "iisExpress": 
+    {
       "applicationUrl": "http://localhost:5082/",
       "sslPort": 0
     }
   },
-  "profiles": {
-    "IIS Express": {
+  "profiles": 
+  {
+    "IIS Express": 
+    {
       "commandName": "IISExpress",
       "launchBrowser": true,
       "launchUrl": "api/values",
-      "environmentVariables": {
+      "environmentVariables": 
+      {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Fifa_WebAPI": {
+    "Fifa_WebAPI": 
+    {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/values",
-      "environmentVariables": {
+      "environmentVariables": 
+      {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:5083/"

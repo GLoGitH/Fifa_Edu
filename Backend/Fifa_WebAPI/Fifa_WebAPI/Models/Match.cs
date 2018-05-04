@@ -7,7 +7,7 @@ namespace Fifa_WebAPI.Models
 {
     public class Match
     {
-		public int       ID         { get; set; }
+		public int       MatchID    { get; set; }
 		public DateTime  MatchDate  { get; set; }
 
 		public Team      Team1      { get; set; }

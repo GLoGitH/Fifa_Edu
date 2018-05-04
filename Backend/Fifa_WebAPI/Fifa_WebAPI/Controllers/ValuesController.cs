@@ -13,7 +13,7 @@ namespace Fifa_WebAPI.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new string[] { "defaultvalue1", "defaultvalue2" };
         }
 
         // GET api/values/5

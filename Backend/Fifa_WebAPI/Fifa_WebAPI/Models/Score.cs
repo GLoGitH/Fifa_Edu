@@ -9,7 +9,7 @@ namespace Fifa_WebAPI.Models
 
 	public class Score
 	{
-		public int        ID                      { get; set; }
+		public int        ScoreID                 { get; set; }
 
 		public int        ScoreValue1             { get; set; }
 		public int        ScoreValue2             { get; set; }
