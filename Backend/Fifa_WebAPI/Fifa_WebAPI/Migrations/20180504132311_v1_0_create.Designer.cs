@@ -12,9 +12,10 @@ using System;
 namespace Fifa_WebAPI.Migrations
 {
     [DbContext(typeof(FifaDbContext))]
-    partial class FifaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180504132311_v1_0_create")]
+    partial class v1_0_create
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
