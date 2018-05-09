@@ -32,15 +32,15 @@ namespace Fifa_WebAPI.DbContext
 			{
 				return;   // DB has been seeded/contains data already (table Players) 
 			}
-			//var players = new Player[]
-			//  {
-			//	  new Player { FirstName="Monballiu", LastName="Marie" }
-			//  };
-			//foreach (Player p in players) 
-			//{
-			//  context.Players.Add(p);
-			//}
-			//context.SaveChanges();
+			var players = new Player[]
+			{
+			  new Player { FirstName="Marie", LastName="Monballiu" }
+			};
+			foreach (Player p in players) 
+			{
+			  context.Players.Add(p);
+			}
+			context.SaveChanges();
 
 			//			if (context.Teams.Any())
 			//			{

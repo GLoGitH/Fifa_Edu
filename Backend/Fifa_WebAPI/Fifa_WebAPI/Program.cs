@@ -31,6 +31,7 @@ namespace Fifa_WebAPI
 				catch (Exception exc)
 				{
 					var logger = services.GetRequiredService<ILogger<Program>>();
+					
 					logger.LogError(exc, "An error occured while seeding the DB...");
 				}
 			}
