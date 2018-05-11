@@ -9,9 +9,16 @@ class App extends Component
   {
     super(props);
     //this.state = { players: [{ name: 'Jim'}, { name: 'John' }] }
-    this.state = { players: [ ] };
+    this.state =
+      { 
+        players: [ ] , 
+        addPlayerVisible: false, 
+        NewPlayer: {firstName: "", lastName: ""} 
+      };
 
-  }
+    this.togglePlayerAddForm = this.togglePlayerAddForm.bind(this);
+    }
+
 
   componentDidMount()
   {
@@ -21,9 +28,15 @@ class App extends Component
     {
       console.log ("fetch data");
       console.log(findresponse);
-//      console.log(findresponse.movies); 
        this.setState( {players: findresponse})
     })
+
+    //fetch voor andere objecten
+  }
+
+  togglePlayerAddForm()
+  {
+    this.setState({addPlayerVisible: !this.state.addPlayerVisible}) ;
   }
 
   render() 
@@ -39,7 +52,7 @@ class App extends Component
         <p className="App-intro">
           main menu placeholder
         </p>
-        <PlayerList List={this.state.players} />
+        <PlayerList List={this.state.players} addPlayerVisible={this.state.addPlayerVisible} onTogglePlayerAddForm={this.togglePlayerAddForm} NewPlayer={this.state.NewPlayer} />
       </div>
     );
   }

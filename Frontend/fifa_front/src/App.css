@@ -33,10 +33,15 @@
   to { transform: rotate(360deg); }
 }
 
-tablestyle td
+.tablestyle td
 {
   border-style: solid;
   border-color: aquamarine;
   border-width: 1px;
   padding: 5px;
+}
+
+.hideControl
+{
+  visibility:none
 }

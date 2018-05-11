@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../../App.css';
+import AddPlayerForm from './AddPlayer';
 
 
 class playerList extends Component 
@@ -15,26 +15,41 @@ class playerList extends Component
       return(
         <table className="tablestyle"> 
           <thead>
-            <th>&nbsp;</th>
-            <th><u><i>PlayerName</i></u></th>
+            <tr>
+              <th>&nbsp;</th>
+              <th><u><i>PlayerName</i></u></th>
+            </tr>  
           </thead>
           <tbody>
+          <tr>
+              <td colSpan="2">&nbsp;</td>
+            </tr>
             {
               this.props.List.map( (playerFromList, key) =>
               {
                 return(
-                  <tr key="{key}">
+                  <tr key={key}>
                     <td>{key+1}</td>
                     <td>{playerFromList.fullName}</td>
                   </tr>
                 )
               })
             }
+            <tr>
+              <td colSpan="2">&nbsp;</td>
+            </tr>
+            <tr>
+              <td colSpan="2">
+                <button onClick={this.props.onTogglePlayerAddForm}>Add player</button>
+                { this.props.addPlayerVisible ? <AddPlayerForm addPlayer={this.props.addPlayer} NewPlayer={this.props.NewPlayer} /> : null }
+              </td>
+            </tr>
           </tbody>
         </table>
       );
     }
 }
+
 export default playerList;
 
 
