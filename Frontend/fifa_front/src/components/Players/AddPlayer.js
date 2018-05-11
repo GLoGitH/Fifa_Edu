@@ -10,13 +10,9 @@ class AddPlayer extends Component
           <p>
               firstName <input type="text" id="PlayerFirstName" onChange={this.handleUpdate} value={this.props.NewPlayer.firstName} /> <br />
               lastName  <input type="text" id="PlayerLastName"  onChange={this.handleUpdate} value={this.props.NewPlayer.lastName} />  <br />
-              <button onClick={this.props.addPlayer}>Save player</button>
+              <button onClick={this.props.SavePlayer}>Save player</button>
           </p>
         )
-    }
-
-    savePlayer(newName) 
-    {
     }
 
 }

@@ -17,6 +17,7 @@ class App extends Component
       };
 
     this.togglePlayerAddForm = this.togglePlayerAddForm.bind(this);
+    this.savePlayer = this.savePlayer.bind(this);
     }
 
 
@@ -39,6 +40,12 @@ class App extends Component
     this.setState({addPlayerVisible: !this.state.addPlayerVisible}) ;
   }
 
+  savePlayer()
+  {
+    //actually save a player
+    console.log ("savePlayer!")
+  }
+
   render() 
   {
     console.log("render app")
@@ -52,7 +59,13 @@ class App extends Component
         <p className="App-intro">
           main menu placeholder
         </p>
-        <PlayerList List={this.state.players} addPlayerVisible={this.state.addPlayerVisible} onTogglePlayerAddForm={this.togglePlayerAddForm} NewPlayer={this.state.NewPlayer} />
+        <PlayerList 
+           List={this.state.players} 
+           addPlayerVisible={this.state.addPlayerVisible} 
+           NewPlayer={this.state.NewPlayer} 
+           onTogglePlayerAddForm={this.togglePlayerAddForm} 
+           onToggleSavePlayer={this.savePlayer}
+        />
       </div>
     );
   }

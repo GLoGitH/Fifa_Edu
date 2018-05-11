@@ -21,9 +21,6 @@ class playerList extends Component
             </tr>  
           </thead>
           <tbody>
-          <tr>
-              <td colSpan="2">&nbsp;</td>
-            </tr>
             {
               this.props.List.map( (playerFromList, key) =>
               {
@@ -41,7 +38,11 @@ class playerList extends Component
             <tr>
               <td colSpan="2">
                 <button onClick={this.props.onTogglePlayerAddForm}>Add player</button>
-                { this.props.addPlayerVisible ? <AddPlayerForm addPlayer={this.props.addPlayer} NewPlayer={this.props.NewPlayer} /> : null }
+                { this.props.addPlayerVisible ? <AddPlayerForm 
+                                                      addPlayer={this.props.addPlayer} 
+                                                      NewPlayer={this.props.NewPlayer} 
+                                                      SavePlayer={this.props.onToggleSavePlayer}
+                                                /> : null }
               </td>
             </tr>
           </tbody>
