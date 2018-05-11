@@ -1,40 +1,40 @@
 import React, { Component } from 'react';
+import '../../App.css';
+
 
 class playerList extends Component 
 {
-//   constructor(props) 
-//   {
-//       super(props);
-// //      this.state = { data: [ ] };
-//   }
-
-  // componentDidMount()
-  // {
-  //   fetch('https://facebook.github.io/react-native/movies.json')
-  //    .then((Response)=>Response.json())
-  //    .then((findresponse)=>
-  //   {
-  //     console.log(findresponse);
-  //     console.log(findresponse.movies);
-  //     this.setState( {data: findresponse.movies})
-  //   })
-  // }
 
     render() 
     {
-      return(<ul>
+      console.log("PlayerList this.props");
+      console.log(this.props);
+      console.log("PlayerList this.props.list");
+      console.log(this.props.List);
+    
+      return(
+        <table className="tablestyle"> 
+          <thead>
+            <th>&nbsp;</th>
+            <th><u><i>PlayerName</i></u></th>
+          </thead>
+          <tbody>
+            {
+              this.props.List.map( (playerFromList, key) =>
               {
-                //console.log(this.props);
-                console.log(this.props.list)}
-                {//this.props.list.map(listValue)  
-                //<li>{playerList, listValue}</li>
-                  this.props.list.map( (playerFromList, key) =>
-                  {
-                    return(<li key={key}>{playerFromList.name}</li>)
-                  }
-                 )
-                }
-             </ul>);
+                return(
+                  <tr key="{key}">
+                    <td>{key+1}</td>
+                    <td>{playerFromList.fullName}</td>
+                  </tr>
+                )
+              })
+            }
+          </tbody>
+        </table>
+      );
     }
 }
 export default playerList;
+
+

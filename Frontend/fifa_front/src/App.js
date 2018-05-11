@@ -8,11 +8,28 @@ class App extends Component
   constructor(props)
   {
     super(props);
-    this.state = { players: [{ name: 'Jim'}, { name: 'John' }] }
+    //this.state = { players: [{ name: 'Jim'}, { name: 'John' }] }
+    this.state = { players: [ ] };
+
+  }
+
+  componentDidMount()
+  {
+    fetch('http://localhost:5082/api/players')
+      .then((Response)=>Response.json())
+      .then((findresponse)=>
+    {
+      console.log ("fetch data");
+      console.log(findresponse);
+//      console.log(findresponse.movies); 
+       this.setState( {players: findresponse})
+    })
   }
 
   render() 
   {
+    console.log("render app")
+    console.log(this.state.players)
     return (
       <div className="App">
         <header className="App-header">
@@ -20,12 +37,9 @@ class App extends Component
           <h1 className="App-title">Welcome to Fifa Venti follow </h1>
         </header>
         <p className="App-intro">
-          main menu 
+          main menu placeholder
         </p>
-        <PlayerList list={this.state.players} />
-        {
-          console.log(this.state.players)
-        }
+        <PlayerList List={this.state.players} />
       </div>
     );
   }
