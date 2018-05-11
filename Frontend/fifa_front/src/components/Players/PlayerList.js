@@ -27,14 +27,13 @@ class playerList extends Component
                 //console.log(this.props);
                 console.log(this.props.list)}
                 {//this.props.list.map(listValue)  
-     //             <li>{playerList, listValue}</li>
-                  this.props.list.map((playerFromList, key) =>
+                //<li>{playerList, listValue}</li>
+                  this.props.list.map( (playerFromList, key) =>
                   {
-                    return(
-                      <li key={key}>{playerFromList.name}</li>
-
-                )})
-              }
+                    return(<li key={key}>{playerFromList.name}</li>)
+                  }
+                 )
+                }
              </ul>);
     }
 }
