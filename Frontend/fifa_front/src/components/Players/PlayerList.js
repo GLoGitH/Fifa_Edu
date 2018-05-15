@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import AddPlayerForm from './AddPlayer';
+import editImg from '../../img/edit.png';
+import deleteImg from '../../img/delete.jpg';
 
 
 class playerList extends Component 
@@ -28,21 +30,23 @@ class playerList extends Component
                   <tr key={key}>
                     <td>{key+1}</td>
                     <td>{playerFromList.fullName}</td>
+                    <td><img src={editImg}  alt="edit" className="img" /></td>
+                    <td><img src={deleteImg}  alt="remove" className="img" /></td>
                   </tr>
                 )
               })
             }
             <tr>
-              <td colSpan="2">&nbsp;</td>
+              <td colSpan="4">&nbsp;</td>
             </tr>
             <tr>
-              <td colSpan="2">
+              <td colSpan="4">
                 <button onClick={this.props.onTogglePlayerAddForm}>Add player</button>
                 { this.props.addPlayerVisible ? <AddPlayerForm 
                                                       addPlayer={this.props.addPlayer} 
                                                       NewPlayer={this.props.NewPlayer} 
                                                       SavePlayer={this.props.onToggleSavePlayer}
-                                                /> : null }
+                                                /> : null } 
               </td>
             </tr>
           </tbody>
