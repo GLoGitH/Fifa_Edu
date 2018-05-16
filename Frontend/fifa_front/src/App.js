@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import logo from './img/fifa.jpg';
+import isLoadingImg from './img/isLoading.svg';
 import './App.css';
 import PlayerList from './components/Players/PlayerList';
 import axios from 'axios';
@@ -15,17 +16,20 @@ class App extends Component
         players: [ ] , 
         addPlayerVisible: false, 
         NewPlayer: {firstName: "", lastName: ""}, 
+        isLoading : false, 
         BackEndUrl: { Players: "http://localhost:5082/api/players" }
       };
 
     this.togglePlayerAddForm = this.togglePlayerAddForm.bind(this);
 
-    this.toggleAddPlayerFirstName = this.toggleAddPlayerFirstName.bind(this);
-    this.toggleAddPlayerLastName = this.toggleAddPlayerLastName.bind(this);
+    this.handleNew = this.handleNew.bind(this);
   
     this.savePlayer = this.savePlayer.bind(this);
+
+    this.deletePlayer = this.deletePlayer.bind(this);
   }
 
+  handleChange = event => {this.setState({CurID : event.target.value });}
 
   componentDidMount()
   {
@@ -44,13 +48,15 @@ class App extends Component
     console.log(this.state.BackEndUrl);
     console.log(this.state.BackEndUrl.Players);
 
+    this.setState({isLoading: true});
+
     fetch(this.state.BackEndUrl.Players) 
       .then((Response)=>Response.json())
       .then((findresponse)=>
     {
       console.log ("fetch data");
       console.log(findresponse);
-       this.setState( {players: findresponse})
+       this.setState( {players: findresponse, isLoading: false})
     })
   }
 
@@ -62,7 +68,9 @@ class App extends Component
   
   toggleAddPlayerFirstName(newFirstName)
   {
-    this.setState({NewPlayer: [ ...this.state.NewPlayer, newFirstName] }) ;
+    console.log('newFirstName [',newFirstName,']');
+    console.log('[', ...this.state.NewPlayer.newFirstName, ']');
+    this.setState({NewPlayer: [ ...this.state.NewPlayer.newFirstName, newFirstName] }) ;
   }
 
   toggleAddPlayerLastName(newLastName)
@@ -70,6 +78,12 @@ class App extends Component
     this.setState({NewPlayer: [ ...this.state.NewPlayer, newLastName] }) ;
   }
   
+  handleNew(event)
+  {
+    let model = this.state.NewPlayer;
+    model[event.target.name] = event.target.value;
+    this.setState({NewPlayer: model});
+  }
 
   savePlayer(event)
   {
@@ -80,38 +94,56 @@ class App extends Component
 
 
     axios.post(this.state.BackEndUrl.Players, 
-      {firstName: 'testFN', lastName: 'testLN'})
+      /*{firstName: 'testFN', lastName: 'testLN'}*/
+      this.state.NewPlayer
+        )
       .then(resultaat => 
         { 
-           console.log("post resultaat"); 
-           console.log(resultaat); 
-           console.log(resultaat.data);
+          console.log("post resultaat"); 
+          console.log(resultaat); 
+          console.log(resultaat.data);
           const status = resultaat.status;
           
-          (status === 201 ? this.forceUpdate() : console.log("Axios Error occured -- http status [",status,"]"))
+          if (status === 201 || status === 200) 
+          {
+            this.setState({NewPlayer: {firstName: '', lastName: ''}})
+            this.loadPlayerList();
+          }
+          else 
+          {
+            console.log("Axios Error occured -- http status [",status,"]")
+          } 
         })
       .catch((err) =>  {console.log("Axios error : [",err,"]");}
       )
     
-    //console.log(this.state.NewPlayer)
+  }
 
-    /*
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    
-    const options = 
-    {
-      method: 'POST',
-      headers, 
-      body: JSON.stringify(this.state.NewPlayer)
-    }
+  deletePlayer(playerID)
+  {
+    console.log("delete user")
+    //console.log("playerID [", {playerID}, "]");
+    //debugger;
+//console.log(event.target.value);
+ 
+    console.log("CurID [", playerID, "]");
 
-    const request = new Request('http://localhost:5082/api/players', options);
-    const response = fetch(request);
-    const status = response.status;
+    var url = this.state.BackEndUrl.Players + '/' + playerID;
+    console.log ('url for delete [',url,']');
 
-    if (status === 201) { this.loadPlayerList(); }
-*/
+    axios.delete(url)
+      .then(resultaat =>
+        {
+        console.log("post resultaat"); 
+        console.log(resultaat); 
+        console.log(resultaat.data);
+        const status = resultaat.status;
+       
+       ((status === 200 || status === 201) ? this.loadPlayerList() : console.log("Axios Error occured -- http status [",status,"]"))
+     })
+   .catch((err) =>  {console.log("Axios error : [",err,"]");}
+   )
+
   }
 
   render() 
@@ -128,18 +160,30 @@ class App extends Component
         <p className="App-intro">
           main menu placeholder
         </p>
+          {
+            this.state.isLoading ? <img src={isLoadingImg} alt="please wait..." /> :  
           <PlayerList 
              List={this.state.players} 
              addPlayerVisible={this.state.addPlayerVisible} 
              NewPlayer={this.state.NewPlayer} 
              onTogglePlayerAddForm={this.togglePlayerAddForm} 
-             onToggleAddPlayerFirstName={this.toggleAddPlayerFirstName}
-             onToggleAddPlayerLastName={this.toggleAddPlayerLastName}
+             handleNew={this.handleNew}
              onToggleSavePlayer={this.savePlayer}
+             onToggleDeletePlayer={this.deletePlayer}
           />
+          }
       </div>
     );
   }
 }
 
 export default App;
+
+
+
+/*
+
+    this.setState({NewPlayer: [ ...this.state.NewPlayer, newFirstName] }) ;
+
+
+*/

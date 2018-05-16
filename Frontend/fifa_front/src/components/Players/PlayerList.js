@@ -6,13 +6,31 @@ import deleteImg from '../../img/delete.jpg';
 
 class playerList extends Component 
 {
+/*
+  constructor(props)
+    {
+      super(props);
 
+      this.onToggleDeletePlayer = this.onToggleDeletePlayer.bind(this, playerID);
+    }
+*/
+/*
+    deletePlayer(playerID)
+    {
+      console.log("deletePlayer");
+      console.log(this.props.List)
+      console.log(playerID);
+    //  this.props.delete(playerID);
+    }
+*/
     render() 
     {
       console.log("PlayerList this.props");
       console.log(this.props);
       console.log("PlayerList this.props.list");
       console.log(this.props.List);
+      console.log("newplayer to pass along")
+      console.log(this.props.NewPlayer)
     
       return(
         <table className="tablestyle"> 
@@ -30,8 +48,8 @@ class playerList extends Component
                   <tr key={key}>
                     <td>{key+1}</td>
                     <td>{playerFromList.fullName}</td>
-                    <td><img src={editImg}  alt="edit" className="img" /></td>
-                    <td><img src={deleteImg}  alt="remove" className="img" /></td>
+                    <td><img src={editImg}   alt="edit" className="img" /></td>
+                    <td><img src={deleteImg}  onClick={() => this.props.onToggleDeletePlayer(playerFromList.playerID)}  alt="remove" className="img" /></td>
                   </tr>
                 )
               })
@@ -42,10 +60,11 @@ class playerList extends Component
             <tr>
               <td colSpan="4">
                 <button onClick={this.props.onTogglePlayerAddForm}>Add player</button>
+                <p />
                 { this.props.addPlayerVisible ? <AddPlayerForm 
-                                                      addPlayer={this.props.addPlayer} 
                                                       NewPlayer={this.props.NewPlayer} 
-                                                      SavePlayer={this.props.onToggleSavePlayer}
+                                                      handleNew={this.props.handleNew} 
+                                                      SavePlayer={this.props.onToggleSavePlayer} 
                                                 /> : null } 
               </td>
             </tr>
@@ -57,4 +76,14 @@ class playerList extends Component
 
 export default playerList;
 
+
+/*
+                    <td><img src={deleteImg} playerid={playerFromList.playerID} onClick={()=>this.props.onToggleDeletePlayer(playerFromList.playerID)}  alt="remove" className="img" /></td>
+
+
+
+                                        <td><img src={editImg}  playerID={playerFromList.playerID} alt="edit" className="img" /></td>
+                    <td><img src={deleteImg} playerid={playerFromList.playerID} onClick={this.props.onToggleDeletePlayer}  alt="remove" className="img" /></td>
+
+*/
 

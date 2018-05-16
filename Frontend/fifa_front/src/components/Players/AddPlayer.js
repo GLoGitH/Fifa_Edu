@@ -4,28 +4,33 @@ import React, { Component } from 'react';
 
 class AddPlayer extends Component 
 {
+    model = null;
 
     constructor(props)
     {
       super(props);
-  
-      this.handleUpdateFirstName = this.handleUpdateFirstName.bind(this);
-      this.handleUpdateLastName  = this.handleUpdateLastName.bind(this);
+console.log ("addPlayer construct")  
+console.log(this.props.NewPlayer)
+
+      this.model = this.props.NewPlayer;
+
+//      this.handleUpdateFirstName = this.handleUpdateFirstName.bind(this);
+//      this.handleUpdateLastName  = this.handleUpdateLastName.bind(this);
     }
   
   
     render() 
     {
         return(
-          <form>
-              firstName <input type="text" id="PlayerFirstName" onChange={this.handleUpdateFirstName} value={this.props.NewPlayer.firstName} /> <br />
-              lastName  <input type="text" id="PlayerLastName"  onChange={this.handleUpdateLastName}  value={this.props.NewPlayer.lastName} placeholder="playername"/>  <br />
+          <div>
+              firstName <input type="text" id="PlayerFirstName" name="firstName" onChange={this.props.handleNew} value={this.model.firstName} /> <br />
+              lastName  <input type="text" id="PlayerLastName"  name="lastName"  onChange={this.props.handleNew}  value={this.model.lastName} placeholder="playername"/>  <br />
               <button onClick={this.props.SavePlayer}>Save player</button>
-          </form>
+          </div>
         )
     }
 
-    
+/*    
     handleUpdateFirstName(event)
     {
         console.log("AddPlayer handleUpdateFirstName");
@@ -46,6 +51,7 @@ class AddPlayer extends Component
      
         //this.props.onToggleAddPlayerLastName(event.target.value);
     }
+*/
 
 /*
     handleUpdate(event)
