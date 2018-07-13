@@ -56,7 +56,7 @@ class App extends Component
     {
       console.log ("fetch data");
       console.log(findresponse);
-       this.setState( {players: findresponse, isLoading: false})
+      this.setState( {players: findresponse, isLoading: false})
     })
   }
 
@@ -107,7 +107,8 @@ class App extends Component
           if (status === 201 || status === 200) 
           {
             this.setState({NewPlayer: {firstName: '', lastName: ''}})
-            this.loadPlayerList();
+            this.togglePlayerAddForm();    /* hide the add form again */ 
+            this.loadPlayerList();     
           }
           else 
           {
@@ -124,7 +125,7 @@ class App extends Component
     console.log("delete user")
     //console.log("playerID [", {playerID}, "]");
     //debugger;
-//console.log(event.target.value);
+    //console.log(event.target.value);
  
     console.log("CurID [", playerID, "]");
 

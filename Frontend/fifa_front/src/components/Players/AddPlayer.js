@@ -24,7 +24,7 @@ console.log(this.props.NewPlayer)
         return(
           <div>
               firstName <input type="text" id="PlayerFirstName" name="firstName" onChange={this.props.handleNew} value={this.model.firstName} /> <br />
-              lastName  <input type="text" id="PlayerLastName"  name="lastName"  onChange={this.props.handleNew}  value={this.model.lastName} placeholder="playername"/>  <br />
+              lastName  <input type="text" id="PlayerLastName"  name="lastName"  onChange={this.props.handleNew} value={this.model.lastName} placeholder="playername"/>  <br />
               <button onClick={this.props.SavePlayer}>Save player</button>
           </div>
         )
