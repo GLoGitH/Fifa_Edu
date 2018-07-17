@@ -55,7 +55,7 @@ class playerList extends Component
                   <tr key={key}>
                     <td>{key+1}</td>
                     <td>{playerFromList.fullName}</td>
-                    <td><img src={editImg}    alt="edit" className="img" /></td>
+                    <td><img src={editImg}    onClick={() => this.props.onToggleEditPlayer(key)}  alt="edit" className="img" /></td>
                     <td><img src={deleteImg}  onClick={() => this.props.onToggleDeletePlayer(playerFromList.playerID)}  alt="remove" className="img" /></td>
                   </tr>
                 )
@@ -66,7 +66,7 @@ class playerList extends Component
             </tr>
             <tr>
               <td colSpan="4">
-                <button onClick={this.props.onTogglePlayerAddForm}>Add player</button>
+                { !this.props.addPlayerVisible ? <button onClick={this.props.onTogglePlayerAddForm}>Add player</button> : null  }  
                 <p />
                 { this.props.addPlayerVisible ? <AddPlayerForm {...playerFormProps} /> : null } 
               </td>

@@ -15,7 +15,7 @@ class App extends Component
       { 
         players: [ ] , 
         addPlayerVisible: false, 
-        NewPlayer: {firstName: "", lastName: ""}, 
+        NewPlayer: {firstName: "", lastName: "", playerID: -1}, 
         isLoading : false, 
         BackEndUrl: { Players: "http://localhost:5082/api/players" }
       };
@@ -27,6 +27,8 @@ class App extends Component
     this.savePlayer = this.savePlayer.bind(this);
 
     this.deletePlayer = this.deletePlayer.bind(this);
+
+    this.showEditPlayer = this.showEditPlayer.bind(this);
   }
 
   handleChange = event => {this.setState({CurID : event.target.value });}
@@ -93,31 +95,61 @@ class App extends Component
 //    console.log(this.state)
 
 
-    axios.post(this.state.BackEndUrl.Players, 
-      /*{firstName: 'testFN', lastName: 'testLN'}*/
-      this.state.NewPlayer
-        )
-      .then(resultaat => 
-        { 
-          console.log("post resultaat"); 
-          console.log(resultaat); 
-          console.log(resultaat.data);
-          const status = resultaat.status;
+    //check insert or edit
+
+    let playerSearch = this.state.NewPlayer.playerID;
+    if (this.state.players.some(function(item) { return item.playerID === playerSearch } ))
+    {
+      //edit
+      let url = this.state.BackEndUrl.Players + '/' +  playerSearch;
+      axios.put(url, 
+                this.state.NewPlayer)
+        .then(resultaat =>
+          { 
+            console.log("post resultaat"); 
+            console.log(resultaat); 
+            console.log(resultaat.data);
+            const status = resultaat.status;
+            
+            if (status === 201 || status === 200 || status === 204) 
+            {
+              this.setState({NewPlayer: {firstName: '', lastName: ''}})
+              this.togglePlayerAddForm();    /* hide the add form again */ 
+              this.loadPlayerList();     
+            }
+            else 
+            {
+              console.log("Axios Error occured -- http status [",status,"]")
+            } 
+          })
+        .catch((err) =>  {console.log("Axios error : [",err,"]");})
+      }
+      else 
+      {
+        let newPlayer = { firstName: this.state.NewPlayer.firstName, lastName: this.state.NewPlayer.lastName };
+        axios.post(this.state.BackEndUrl.Players, 
+                   newPlayer)
+         .then(resultaat => 
+         { 
+           console.log("post resultaat"); 
+           console.log(resultaat); 
+           console.log(resultaat.data);
+           const status = resultaat.status;
           
-          if (status === 201 || status === 200) 
-          {
-            this.setState({NewPlayer: {firstName: '', lastName: ''}})
-            this.togglePlayerAddForm();    /* hide the add form again */ 
-            this.loadPlayerList();     
-          }
-          else 
-          {
-            console.log("Axios Error occured -- http status [",status,"]")
-          } 
-        })
-      .catch((err) =>  {console.log("Axios error : [",err,"]");}
-      )
+           if (status === 201 || status === 200) 
+           {
+             this.setState({NewPlayer: {firstName: '', lastName: ''}})
+             this.togglePlayerAddForm();    /* hide the add form again */ 
+             this.loadPlayerList();     
+           }
+           else 
+           {
+             console.log("Axios Error occured -- http status [",status,"]")
+           }  
+          })
+          .catch((err) =>  {console.log("Axios error : [",err,"]");})
     
+      }
   }
 
   deletePlayer(playerID)
@@ -147,6 +179,20 @@ class App extends Component
 
   }
 
+  showEditPlayer(playerID)
+  {
+    console.log("addPlayerVisible: [", this.state.addPlayerVisible, "]");
+    //set the player as Newplayer & show form to enable editing
+    this.togglePlayerAddForm();
+    let EditPlayer = this.state.players[playerID];
+    this.setState({NewPlayer: {firstName: EditPlayer.firstName, lastName: EditPlayer.lastName, playerID: EditPlayer.playerID}})
+    //this.props.NewPlayer.newFirstName = this.state.players[playerID].
+    console.log(this.state.players[playerID])
+
+  }
+
+
+
   render() 
   {
     console.log("rendering app")
@@ -171,6 +217,7 @@ class App extends Component
              handleNew={this.handleNew}
              onToggleSavePlayer={this.savePlayer}
              onToggleDeletePlayer={this.deletePlayer}
+             onToggleEditPlayer={this.showEditPlayer}
           />
           }
       </div>
