@@ -28,7 +28,7 @@ class App extends Component
 
     this.deletePlayer = this.deletePlayer.bind(this);
 
-    this.showEditPlayer = this.showEditPlayer.bind(this);
+    this.showEditPlayer = this.showEditPlayer.bind(this); 
   }
 
   handleChange = event => {this.setState({CurID : event.target.value });}
@@ -218,6 +218,7 @@ class App extends Component
              onToggleSavePlayer={this.savePlayer}
              onToggleDeletePlayer={this.deletePlayer}
              onToggleEditPlayer={this.showEditPlayer}
+             onToggleCancelAddEdit={this.togglePlayerAddForm}
           />
           }
       </div>

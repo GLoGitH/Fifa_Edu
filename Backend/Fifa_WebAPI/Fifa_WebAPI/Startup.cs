@@ -29,6 +29,8 @@ namespace Fifa_WebAPI
         {
 			//services.AddCors();  //Enable Cross-OriginRequests (i.e. requests from another origin then the own one - eg. from another port on localhost... -- like when you have a front-end & backend app running and enable them to communicate) 
 
+			
+
 			services.AddDbContext<FifaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
 			services.AddMvc();

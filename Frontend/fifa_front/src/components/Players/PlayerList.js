@@ -36,15 +36,19 @@ class playerList extends Component
       {
         NewPlayer: this.props.NewPlayer,
         handleNew: this.props.handleNew,
-        SavePlayer: this.props.onToggleSavePlayer
+        SavePlayer: this.props.onToggleSavePlayer, 
+        CancelAddEdit: this.props.onTogglePlayerAddForm 
       };
     
       return(
-        <table className="tablestyle"> 
+        <div className="container">
+        <table className="tablestyle table-hover"> 
           <thead>
             <tr>
               <th>&nbsp;</th>
               <th><u><i>PlayerName</i></u></th>
+              <th><i>edit</i></th>
+              <th><i>remove from list</i></th>
             </tr>  
           </thead>
           <tbody>
@@ -55,8 +59,8 @@ class playerList extends Component
                   <tr key={key}>
                     <td>{key+1}</td>
                     <td>{playerFromList.fullName}</td>
-                    <td><img src={editImg}    onClick={() => this.props.onToggleEditPlayer(key)}  alt="edit" className="img" /></td>
-                    <td><img src={deleteImg}  onClick={() => this.props.onToggleDeletePlayer(playerFromList.playerID)}  alt="remove" className="img" /></td>
+                    <td><img src={editImg}    onClick={() => this.props.onToggleEditPlayer(key)}  alt="edit" className="img" data-toggle="tooltip" title="edit" /></td>
+                    <td><img src={deleteImg}  onClick={() => this.props.onToggleDeletePlayer(playerFromList.playerID)}  alt="remove" className="img" data-toggle="tooltip" title="remove" /></td>
                   </tr>
                 )
               })
@@ -73,6 +77,7 @@ class playerList extends Component
             </tr>
           </tbody>
         </table>
+        </div>
       );
     }
 }
