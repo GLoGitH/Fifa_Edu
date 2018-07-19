@@ -1,23 +1,27 @@
 import React, { Component } from 'react';
-import logo from './img/fifa.jpg';
 import isLoadingImg from './img/isLoading.svg';
-import './App.css';
-import PlayerList from './components/Players/PlayerList';
 import axios from 'axios';
+import './App.css';
+import AvailableMenu from './AvailableMenu';
+import AppHeader from './components/appHeader';
+import PlayerList from './components/Players/PlayerList';
+
 
 class App extends Component 
 {
   constructor(props)
   {
     super(props);
-    //this.state = { players: [{ name: 'Jim'}, { name: 'John' }] }
+
+    //this.state = { players: [{ name: 'Jim'}, { name: 'John' }] }    
     this.state =
       { 
         players: [ ] , 
         addPlayerVisible: false, 
         NewPlayer: {firstName: "", lastName: "", playerID: -1}, 
         isLoading : false, 
-        BackEndUrl: { Players: "http://localhost:5082/api/players" }
+        BackEndUrl: { Players: "http://localhost:5082/api/players" }, 
+        ActiveMenu: AvailableMenu.Players
       };
 
     this.togglePlayerAddForm = this.togglePlayerAddForm.bind(this);
@@ -33,14 +37,10 @@ class App extends Component
 
   handleChange = event => {this.setState({CurID : event.target.value });}
 
+
   componentDidMount()
   {
     this.loadPlayerList();
-
-    //axios.get('https://jsonplaceholder.typicode.com/users').then(res => {const persons = res.data; this.setState({persons})})
-
-    //axios.post('https://jsonplaceholder.typicode.com/users').then(res => {console.log(res); console.log(res.data);})
-
 
     //fetch voor andere objecten
   }
@@ -68,18 +68,7 @@ class App extends Component
     this.setState({addPlayerVisible: !this.state.addPlayerVisible}) ;
   }
   
-  toggleAddPlayerFirstName(newFirstName)
-  {
-    console.log('newFirstName [',newFirstName,']');
-    console.log('[', ...this.state.NewPlayer.newFirstName, ']');
-    this.setState({NewPlayer: [ ...this.state.NewPlayer.newFirstName, newFirstName] }) ;
-  }
-
-  toggleAddPlayerLastName(newLastName)
-  {
-    this.setState({NewPlayer: [ ...this.state.NewPlayer, newLastName] }) ;
-  }
-  
+    
   handleNew(event)
   {
     let model = this.state.NewPlayer;
@@ -94,9 +83,7 @@ class App extends Component
 //    console.log(event)
 //    console.log(this.state)
 
-
     //check insert or edit
-
     let playerSearch = this.state.NewPlayer.playerID;
     if (this.state.players.some(function(item) { return item.playerID === playerSearch } ))
     {
@@ -186,41 +173,70 @@ class App extends Component
     this.togglePlayerAddForm();
     let EditPlayer = this.state.players[playerID];
     this.setState({NewPlayer: {firstName: EditPlayer.firstName, lastName: EditPlayer.lastName, playerID: EditPlayer.playerID}})
-    //this.props.NewPlayer.newFirstName = this.state.players[playerID].
     console.log(this.state.players[playerID])
-
   }
 
-
+  doNav(activeMenuItem)
+  {
+    this.setState({ActiveMenu: activeMenuItem}) ; 
+  }
 
   render() 
   {
     console.log("rendering app")
     console.log(this.state.players)
 
+    let component  = null; 
+
+    switch (this.state.ActiveMenu) 
+    {
+        case AvailableMenu.Players:
+          if (this.state.isLoading) 
+            component = <img src={isLoadingImg} alt="please wait..." /> 
+          else 
+            component = 
+              <PlayerList 
+                  List={this.state.players} 
+                  addPlayerVisible={this.state.addPlayerVisible} 
+                  NewPlayer={this.state.NewPlayer} 
+                  onTogglePlayerAddForm={this.togglePlayerAddForm} 
+                  handleNew={this.handleNew}
+                  onToggleSavePlayer={this.savePlayer}
+                  onToggleDeletePlayer={this.deletePlayer}
+                  onToggleEditPlayer={this.showEditPlayer}
+                  onToggleCancelAddEdit={this.togglePlayerAddForm}
+              />
+          break;
+        case AvailableMenu.Teams:
+          break;
+        case AvailableMenu.Home:
+          break;
+        default:
+          break;
+    }
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to Fifa Venti follow </h1>
-        </header>
-        <p className="App-intro">
-          main menu placeholder
-        </p>
-          {
-            this.state.isLoading ? <img src={isLoadingImg} alt="please wait..." /> :  
-          <PlayerList 
-             List={this.state.players} 
-             addPlayerVisible={this.state.addPlayerVisible} 
-             NewPlayer={this.state.NewPlayer} 
-             onTogglePlayerAddForm={this.togglePlayerAddForm} 
-             handleNew={this.handleNew}
-             onToggleSavePlayer={this.savePlayer}
-             onToggleDeletePlayer={this.deletePlayer}
-             onToggleEditPlayer={this.showEditPlayer}
-             onToggleCancelAddEdit={this.togglePlayerAddForm}
-          />
-          }
+        <AppHeader />
+        <div className="container">
+          <nav className="navbar">
+            <div className="navbar-header">
+              <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span className="icon-bar"></span>
+                <span className="icon-bar"></span>
+                <span className="icon-bar"></span>                        
+              </button>
+            </div>
+            <div className="collapse navbar-collapse" id="myNavbar">
+            <ul className="nav nav-pills" role="tablist">
+              <li className="fifaNav"><a onClick="{() => this.doNav(AvailableMenu.Home)}">Home</a></li>
+              <li className="fifaNav active"><a onClick="{() => this.doNav(AvailableMenu.Players)}">Players</a></li>
+              <li className="fifaNav"><a onClick="{() => this.setState({ActiveMenu: AvailableMenu.Teams})}">Teams</a></li>
+            </ul>
+            </div>
+          </nav>
+        </div>
+        {component}
       </div>
     );
   }
@@ -231,8 +247,31 @@ export default App;
 
 
 /*
-
     this.setState({NewPlayer: [ ...this.state.NewPlayer, newFirstName] }) ;
 
+      <li className="fifanav"><a onClick="{() => this.setState({ActiveMenu: AvailableMenu.Home})}">Home</a></li>
+      <li className="fifanav active"><a onClick="{() => this.setState({ActiveMenu: AvailableMenu.Players})}">Players</a></li>
+      <li className="fifanav"><a onClick="{() => this.setState({ActiveMenu: AvailableMenu.Teams})}">Teams</a></li>
+
+
+    //axios.get('https://jsonplaceholder.typicode.com/users').then(res => {const persons = res.data; this.setState({persons})})
+
+    //axios.post('https://jsonplaceholder.typicode.com/users').then(res => {console.log(res); console.log(res.data);})
+
+
+
+
+
+  toggleAddPlayerFirstName(newFirstName)
+  {
+    console.log('newFirstName [',newFirstName,']');
+    console.log('[', ...this.state.NewPlayer.newFirstName, ']');
+    this.setState({NewPlayer: [ ...this.state.NewPlayer.newFirstName, newFirstName] }) ;
+  }
+
+  toggleAddPlayerLastName(newLastName)
+  {
+    this.setState({NewPlayer: [ ...this.state.NewPlayer, newLastName] }) ;
+  }
 
 */

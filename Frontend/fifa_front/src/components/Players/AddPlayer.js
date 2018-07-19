@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-//import playerList from './PlayerList';
-
 
 class AddPlayer extends Component 
 {
@@ -9,19 +7,16 @@ class AddPlayer extends Component
     constructor(props)
     {
       super(props);
-console.log ("addPlayer construct")  
-console.log(this.props.NewPlayer)
+
+      console.log ("addPlayer construct")  
+      console.log(this.props.NewPlayer)
 
       this.model = this.props.NewPlayer;
-
-//      this.handleUpdateFirstName = this.handleUpdateFirstName.bind(this);
-//      this.handleUpdateLastName  = this.handleUpdateLastName.bind(this);
     }
-  
   
     render() 
     {
-        return(
+        return (
           <div>
               firstName <input type="text" id="PlayerFirstName" name="firstName" onChange={this.props.handleNew} value={this.model.firstName} /> <br />
               lastName  <input type="text" id="PlayerLastName"  name="lastName"  onChange={this.props.handleNew} value={this.model.lastName} placeholder="playername"/>  <br />
@@ -33,6 +28,11 @@ console.log(this.props.NewPlayer)
     }
 
 /*    
+
+//      this.handleUpdateFirstName = this.handleUpdateFirstName.bind(this);
+//      this.handleUpdateLastName  = this.handleUpdateLastName.bind(this);
+
+
     handleUpdateFirstName(event)
     {
         console.log("AddPlayer handleUpdateFirstName");

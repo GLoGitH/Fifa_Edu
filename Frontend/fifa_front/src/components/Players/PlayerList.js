@@ -6,23 +6,6 @@ import deleteImg from '../../img/delete.jpg';
 
 class playerList extends Component 
 {
-/*
-  constructor(props)
-    {
-      super(props);
-
-      this.onToggleDeletePlayer = this.onToggleDeletePlayer.bind(this, playerID);
-    }
-*/
-/*
-    deletePlayer(playerID)
-    {
-      console.log("deletePlayer");
-      console.log(this.props.List)
-      console.log(playerID);
-    //  this.props.delete(playerID);
-    }
-*/
     render() 
     {
       console.log("PlayerList this.props");
@@ -40,8 +23,7 @@ class playerList extends Component
         CancelAddEdit: this.props.onTogglePlayerAddForm 
       };
     
-      return(
-        <div className="container">
+      return (
         <table className="tablestyle table-hover"> 
           <thead>
             <tr>
@@ -77,7 +59,6 @@ class playerList extends Component
             </tr>
           </tbody>
         </table>
-        </div>
       );
     }
 }
@@ -95,3 +76,20 @@ export default playerList;
 
 */
 
+/*
+  constructor(props)
+    {
+      super(props);
+
+      this.onToggleDeletePlayer = this.onToggleDeletePlayer.bind(this, playerID);
+    }
+*/
+/*
+    deletePlayer(playerID)
+    {
+      console.log("deletePlayer");
+      console.log(this.props.List)
+      console.log(playerID);
+    //  this.props.delete(playerID);
+    }
+*/
