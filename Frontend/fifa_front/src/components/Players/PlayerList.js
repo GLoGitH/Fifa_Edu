@@ -18,7 +18,7 @@ class playerList extends Component
       const playerFormProps = 
       {
         NewPlayer: this.props.NewPlayer,
-        handleNew: this.props.handleNew,
+        handleNewPlayer: this.props.handleNewPlayer,
         SavePlayer: this.props.onToggleSavePlayer, 
         CancelAddEdit: this.props.onToggleAddForm 
       };

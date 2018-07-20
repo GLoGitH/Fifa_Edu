@@ -28,17 +28,20 @@ class App extends Component
         NewTeam: {teamName: "", teamID: -1}, 
         
         isLoading : false, 
-        ActiveMenu: AvailableMenu.Players   /*Teams*/  /*Players*/ /* default value */
+        ActiveMenu: ""
       };
 
     this.toggleAddForm = this.toggleAddForm.bind(this);
 
-    this.handleNew = this.handleNew.bind(this);
+    this.handleNewPlayer = this.handleNewPlayer.bind(this);
     this.savePlayer = this.savePlayer.bind(this);
     this.deletePlayer = this.deletePlayer.bind(this);
     this.showEditPlayer = this.showEditPlayer.bind(this); 
     
+    this.handleNewTeam = this.handleNewTeam.bind(this);
+
     this.doNav = this.doNav.bind(this);
+    this.ActivateCurrentMenu = this.ActivateCurrentMenu.bind(this);
   }
 
   handleChange = event => {this.setState({CurID : event.target.value });}
@@ -46,12 +49,38 @@ class App extends Component
 
   componentDidMount()
   {
+    console.log("componentDidMount")
     this.loadPlayerList();
-
     this.loadTeamList();
-
-    //fetch voor andere objecten
   }
+
+  componentWillReceiveProps(newProps)
+  {
+    console.log("componentWill receive props")
+    switch (this.state.ActiveMenu) 
+    {
+      case AvailableMenu.Players:
+        this.loadPlayerList();
+        break;
+      case AvailableMenu.Teams:
+        this.loadTeamList();
+        break;
+      case AvailableMenu.Home:
+        break;
+      default:
+        this.setState({ActiveMenu: AvailableMenu.Players})   //hence set the default value for the menu
+        //this.loadPlayerList();
+        //this.doNav(AvailableMenu.Players);
+        break;
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) 
+  {
+    console.log('Component DID UPDATE!')
+    this.ActivateCurrentMenu();
+  }
+  
 
   //#region Players 
   loadPlayerList()
@@ -64,11 +93,11 @@ class App extends Component
     fetch(this.state.BackEndUrl.Players) 
       .then((Response)=>Response.json())
       .then((findresponse)=>
-    {
-      console.log ("fetch data");
-      console.log(findresponse);
-      this.setState( {players: findresponse, isLoading: false})
-    })
+        {
+            console.log ("fetch data");
+            console.log(findresponse);
+            this.setState( {players: findresponse, isLoading: false})
+        })
   }
 
 
@@ -78,7 +107,7 @@ class App extends Component
   }
   
     
-  handleNew(event)
+  handleNewPlayer(event)
   {
     let model = this.state.NewPlayer;
     model[event.target.name] = event.target.value;
@@ -144,7 +173,6 @@ class App extends Component
            }  
           })
           .catch((err) =>  {console.log("Axios error : [",err,"]");})
-    
       }
   }
 
@@ -163,14 +191,14 @@ class App extends Component
     axios.delete(url)
       .then(resultaat =>
         {
-        console.log("post resultaat"); 
-        console.log(resultaat); 
-        console.log(resultaat.data);
-        const status = resultaat.status;
+          console.log("post resultaat"); 
+          console.log(resultaat); 
+          console.log(resultaat.data);
+          const status = resultaat.status;
        
-       ((status === 200 || status === 201) ? this.loadPlayerList() : console.log("Axios Error occured -- http status [",status,"]"))
-     })
-   .catch((err) =>  {console.log("Axios error : [",err,"]");}
+          ((status === 200 || status === 201) ? this.loadPlayerList() : console.log("Axios Error occured -- http status [",status,"]"))
+        })
+     .catch((err) =>  {console.log("Axios error : [",err,"]");}
    )
 
   }
@@ -189,20 +217,28 @@ class App extends Component
   //#region Teams 
   loadTeamList()
   {
-    this.setState({isLoading: true});
+     this.setState({isLoading: true});
 
-    fetch(this.state.BackEndUrl.Teams) 
-      .then((Response)=>Response.json())
-      .then((findresponse)=>
-    {
-      console.log ("fetch data");
-      console.log(findresponse);
-      this.setState( {teams: findresponse, isLoading: false})
-    })
+     fetch(this.state.BackEndUrl.Teams) 
+       .then((Response)=>Response.json())
+       .then((findresponse)=>
+     {
+       console.log ("fetch data");
+       console.log(findresponse);
+       this.setState( {teams: findresponse, isLoading: false})
+     })
   }
+
+  handleNewTeam(event)
+  {
+    let model = this.state.NewTeam;
+    model[event.target.name] = event.target.value;
+    this.setState({NewTeam: model});
+  }
+
 //#endregion Teams 
 
-
+  //#region Navigation 
   doNav(activeMenuItem)
   {
     console.log("doingNavi");
@@ -211,13 +247,26 @@ class App extends Component
     console.log("ActiveMenu : [", this.state.ActiveMenu, "]");
 
     this.setState({ActiveMenu: activeMenuItem}) ; 
+    this.ActivateCurrentMenu();
   }
+
+  ActivateCurrentMenu()
+  {
+    var menuElems = document.getElementsByClassName("fifaNav");
+    console.log("list of elems:  [", menuElems.length,"]")
+    for (var i = 0; i < menuElems.length; i++) 
+    {
+       menuElems[i].className = menuElems[i].className.replace(" active","");  /* inactivate old currentMenu style */
+       if (menuElems[i].id.substring(2) === this.state.ActiveMenu)  
+         menuElems[i].className += " active";
+    }
+  }
+  //#endregion Navigation
 
 
   render() 
   {
     console.log("rendering app")
-    console.log(this.state.players)
 
     let ContentComponent  = null; 
 
@@ -228,28 +277,31 @@ class App extends Component
       switch (this.state.ActiveMenu) 
       {
           case AvailableMenu.Players:
-              ContentComponent = 
+            ContentComponent = 
                 <PlayerList 
                     List={this.state.players} 
                     addObjVisible={this.state.addObjVisible} 
                     NewPlayer={this.state.NewPlayer} 
                     onToggleAddForm={this.toggleAddForm} 
-                    handleNew={this.handleNew}
+                    handleNewPlayer={this.handleNewPlayer}
                     onToggleSavePlayer={this.savePlayer}
                     onToggleDeletePlayer={this.deletePlayer}
                     onToggleEditPlayer={this.showEditPlayer}
                     onToggleCancelAddEdit={this.toggleAddForm}
                 />
+            console.log(this.state.players)
             break;
           case AvailableMenu.Teams:
-          ContentComponent = 
-            <TeamList 
-                List={this.state.teams}
-                addObjVisible={this.state.addObjVisible} 
-                NewTeam={this.setState.NewTeam}
-                onToggleAddForm={this.toggleAddForm} 
-                onToggleCancelAddEdit={this.toggleAddForm}
-                />
+            ContentComponent = 
+              <TeamList 
+                 List={this.state.teams}
+                 addObjVisible={this.state.addObjVisible} 
+                 NewTeam={this.setState.NewTeam}
+                 onToggleAddForm={this.toggleAddForm} 
+                 handleNewTeam={this.handleNewTeam}
+                 onToggleCancelAddEdit={this.toggleAddForm}
+              />
+            console.log(this.state.teams)
             break;
           case AvailableMenu.Home:
             break;
@@ -270,6 +322,7 @@ class App extends Component
     );
   }
 }
+
 
 export default App;
 

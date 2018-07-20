@@ -10,9 +10,8 @@ class teamList extends Component
       super(props);
 
       console.log ("TeamList construct")  
-      console.log(this.props.ActiveMeu)
 
-      this.ActiveMenu = this.props.ActiveMenu;
+      //this.ActiveMenu = this.props.ActiveMenu;
     }
 
     render() 
@@ -20,7 +19,7 @@ class teamList extends Component
       const teamFormProps = 
       {
         NewTeam: this.props.NewTeam,
-        handleNew: this.props.handleNew,
+        handleNewTeam: this.props.handleNewTeam,
         SavePlayer: this.props.onToggleSaveTeam, 
         CancelAddEdit: this.props.onToggleAddForm 
       };
@@ -30,9 +29,9 @@ class teamList extends Component
           <thead>
             <tr>
               <th>&nbsp;</th>
-              <th><u><i>TeamName</i></u></th>
-              <th><i>edit</i></th>
-              <th><i>remove from list</i></th>
+              <th><u><i>TeamName&nbsp;</i></u></th>
+              <th><i>edit&nbsp;</i></th>
+              <th><i>remove from list&nbsp;</i></th>
             </tr>  
           </thead>
           <tbody>
@@ -42,7 +41,7 @@ class teamList extends Component
                 return(
                   <tr key={key}>
                     <td>{key+1}</td>
-                    <td>{teamFromList.TeamName}</td>
+                    <td>{teamFromList.teamName}</td>
                     <td><img src={editImg}    onClick={() => this.props.onToggleEditTeam(key)}  alt="edit" className="img" data-toggle="tooltip" title="edit" /></td>
                     <td><img src={deleteImg}  onClick={() => this.props.onToggleDeleteTeam(teamFromList.playerID)}  alt="remove" className="img" data-toggle="tooltip" title="remove" /></td>
                   </tr>
