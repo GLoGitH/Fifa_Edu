@@ -8,19 +8,19 @@ class playerList extends Component
 {
     render() 
     {
-      console.log("PlayerList this.props");
+      console.log("PlayerList--- this.props:");
       console.log(this.props);
       console.log("PlayerList this.props.list");
       console.log(this.props.List);
-      console.log("newplayer to pass along")
-      console.log(this.props.NewPlayer)
+      console.log("newplayer to pass along") 
+      console.log(this.props.NewPlayer) 
 
       const playerFormProps = 
       {
         NewPlayer: this.props.NewPlayer,
         handleNew: this.props.handleNew,
         SavePlayer: this.props.onToggleSavePlayer, 
-        CancelAddEdit: this.props.onTogglePlayerAddForm 
+        CancelAddEdit: this.props.onToggleAddForm 
       };
     
       return (
@@ -52,9 +52,9 @@ class playerList extends Component
             </tr>
             <tr>
               <td colSpan="4">
-                { !this.props.addPlayerVisible ? <button onClick={this.props.onTogglePlayerAddForm}>Add player</button> : null  }  
+                { !this.props.addObjVisible ? <button onClick={this.props.onToggleAddForm}>Add player</button> : null  }  
                 <p />
-                { this.props.addPlayerVisible ? <AddPlayerForm {...playerFormProps} /> : null } 
+                { this.props.addObjVisible ? <AddPlayerForm {...playerFormProps} /> : null } 
               </td>
             </tr>
           </tbody>
