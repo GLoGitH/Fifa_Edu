@@ -27,6 +27,11 @@ class AddPlayer extends Component
         )
     }
 
+
+}
+
+export default AddPlayer
+
 /*    
 
 //      this.handleUpdateFirstName = this.handleUpdateFirstName.bind(this);
@@ -71,7 +76,3 @@ class AddPlayer extends Component
         
     }
 */
-
-}
-
-export default AddPlayer

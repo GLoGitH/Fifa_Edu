@@ -64,7 +64,7 @@ class playerList extends Component
 }
 
 export default playerList;
-
+ 
 
 /*
                     <td><img src={deleteImg} playerid={playerFromList.playerID} onClick={()=>this.props.onToggleDeletePlayer(playerFromList.playerID)}  alt="remove" className="img" /></td>

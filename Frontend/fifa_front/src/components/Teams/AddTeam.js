@@ -18,7 +18,7 @@ class AddTeam extends Component
     {
         return (
           <div>
-              TeamName  <input type="text" id="TeamName"  name="TeamName"  onChange={this.props.handleNewTeam} value={this.model.Name} placeholder="team name"/>  <br />
+              TeamName  <input type="text" id="teamName"  name="teamName"  onChange={this.props.handleNewTeam} value={this.model.teamName} placeholder="team name"/>  <br />
               <button onClick={this.props.SaveTeam}>Save Team</button>
               &nbsp;&nbsp;
               <button onClick={this.props.CancelAddEdit}>cancel</button>

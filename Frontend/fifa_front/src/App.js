@@ -39,12 +39,20 @@ class App extends Component
     this.showEditPlayer = this.showEditPlayer.bind(this); 
     
     this.handleNewTeam = this.handleNewTeam.bind(this);
+    this.showEditTeam = this.showEditTeam.bind(this); 
+    this.saveTeam = this.saveTeam.bind(this);
+    this.deleteTeam = this.deleteTeam.bind(this);
+    
 
     this.doNav = this.doNav.bind(this);
     this.ActivateCurrentMenu = this.ActivateCurrentMenu.bind(this);
   }
 
-  handleChange = event => {this.setState({CurID : event.target.value });}
+  handleChange = event => 
+  { 
+      this.setState({CurID : event.target.value });  
+      console.log("handle Change event")
+  }
 
 
   componentDidMount()
@@ -69,7 +77,7 @@ class App extends Component
         break;
       default:
         this.setState({ActiveMenu: AvailableMenu.Players})   //hence set the default value for the menu
-        //this.loadPlayerList();
+        this.loadPlayerList();
         //this.doNav(AvailableMenu.Players);
         break;
     }
@@ -77,10 +85,16 @@ class App extends Component
 
   componentDidUpdate(prevProps, prevState) 
   {
-    console.log('Component DID UPDATE!')
+    console.log('Component Did Update event passed!')
     this.ActivateCurrentMenu();
   }
+
+  toggleAddForm()
+  {
+    this.setState({addObjVisible: !this.state.addObjVisible}) ;
+  }
   
+
 
   //#region Players 
   loadPlayerList()
@@ -101,11 +115,6 @@ class App extends Component
   }
 
 
-  toggleAddForm()
-  {
-    this.setState({addObjVisible: !this.state.addObjVisible}) ;
-  }
-  
     
   handleNewPlayer(event)
   {
@@ -236,7 +245,103 @@ class App extends Component
     this.setState({NewTeam: model});
   }
 
-//#endregion Teams 
+  showEditTeam(teamID)
+  {
+    console.log("addObjVisible: [", this.state.addObjVisible, "]");
+    //set the player as Newplayer & show form to enable editing
+    this.toggleAddForm();
+    let EditTeam = this.state.teams[teamID];
+    this.setState({NewTeam: {teamName: EditTeam.teamName, teamID: EditTeam.teamID}})
+    console.log("team to edit")
+    console.log(this.state.teams[teamID])
+  }
+
+  saveTeam(event)
+  {
+    //actually save a team
+    console.log ("saveTeam!");
+
+    //check insert or edit
+    let itemSearch = this.state.NewTeam.teamID;
+    if (this.state.teams.some(function(item) { return item.teamID === itemSearch } ))
+    {
+      //edit
+      let url = this.state.BackEndUrl.Teams + '/' +  itemSearch;
+      console.log("backend url [", url, "]")
+      axios.put(url, 
+                this.state.NewTeam)
+           .then(resultaat =>
+             { 
+               console.log("post resultaat"); 
+               console.log(resultaat); 
+               console.log(resultaat.data);
+               const status = resultaat.status;
+            
+               if (status === 201 || status === 200 || status === 204) 
+               {
+                 this.setState({NewTeam: {teamName: '', teamID: -1}})
+                 this.toggleAddForm();    /* hide the add form again */ 
+                 this.loadTeamList();     
+                }
+                else 
+                {
+                  console.log("Axios Error occured -- http status [",status,"]")
+                } 
+              })
+           .catch((err) =>  {console.log("Axios error : [",err,"]");})
+    }
+    else 
+    {   //new 
+        let NewTeam = { teamName: this.state.NewTeam.teamName };
+        axios.post(this.state.BackEndUrl.Teams, 
+                   NewTeam)
+         .then(resultaat => 
+         { 
+           console.log("post resultaat"); 
+           console.log(resultaat); 
+           console.log(resultaat.data);
+           const status = resultaat.status;
+          
+           if (status === 201 || status === 200) 
+           {
+             this.setState({NewTeam: {teamName: '', teamID: -1}})
+             this.toggleAddForm();    /* hide the add form again */ 
+             this.loadTeamList();     
+           }
+           else 
+           {
+             console.log("Axios Error occured -- http status [",status,"]")
+           }  
+          })
+          .catch((err) =>  {console.log("Axios error : [",err,"]");})
+      }
+  }
+
+  deleteTeam(teamID)
+  {
+    console.log("delete Team")
+ 
+    console.log("CurID [", teamID, "]");
+
+    var url = this.state.BackEndUrl.Teams + '/' + teamID;
+    console.log ('url for delete [',url,']');
+
+    axios.delete(url)
+      .then(resultaat =>
+        {
+          console.log("post resultaat"); 
+          console.log(resultaat); 
+          console.log(resultaat.data);
+          const status = resultaat.status;
+       
+          ((status === 200 || status === 201) ? this.loadTeamList() : console.log("Axios Error occured -- http status [",status,"]"))
+        })
+     .catch((err) =>  {console.log("Axios error : [",err,"]");}
+   )
+
+
+  }
+  //#endregion Teams 
 
   //#region Navigation 
   doNav(activeMenuItem)
@@ -253,7 +358,7 @@ class App extends Component
   ActivateCurrentMenu()
   {
     var menuElems = document.getElementsByClassName("fifaNav");
-    console.log("list of elems:  [", menuElems.length,"]")
+    console.log("list of elems (menuitems):  [", menuElems.length,"]")
     for (var i = 0; i < menuElems.length; i++) 
     {
        menuElems[i].className = menuElems[i].className.replace(" active","");  /* inactivate old currentMenu style */
@@ -261,7 +366,7 @@ class App extends Component
          menuElems[i].className += " active";
     }
   }
-  //#endregion Navigation
+//#endregion Navigation
 
 
   render() 
@@ -296,13 +401,16 @@ class App extends Component
               <TeamList 
                  List={this.state.teams}
                  addObjVisible={this.state.addObjVisible} 
-                 NewTeam={this.setState.NewTeam}
+                 NewTeam={this.state.NewTeam}
                  onToggleAddForm={this.toggleAddForm} 
                  handleNewTeam={this.handleNewTeam}
+                 onToggleEditTeam={this.showEditTeam}
                  onToggleCancelAddEdit={this.toggleAddForm}
+                 onToggleSaveTeam={this.saveTeam}
+                 onToggleDeleteTeam={this.deleteTeam}
               />
-            console.log(this.state.teams)
-            break;
+              console.log(this.state.teams)
+              break;
           case AvailableMenu.Home:
             break;
           default:
